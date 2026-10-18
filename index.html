@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SleepWell | Sleep Quality Predictor</title>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+:root {
+    --purple: #7868df;
+    --purple-dark: #5445b6;
+    --lavender: #f0edff;
+    --navy: #222649;
+    --muted: #777d9b;
+    --white: #ffffff;
+    --border: #ecebfa;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: 'DM Sans', sans-serif;
+    color: var(--navy);
+    background: #f8f9ff;
+    line-height: 1.6;
+}
+
+h1, h2, h3, .brand {
+    font-family: 'Outfit', sans-serif;
+}
+
+a { text-decoration: none; color: inherit; }
+
+.navbar {
+    background: rgba(255,255,255,.94);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 6%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    backdrop-filter: blur(12px);
+}
+
+.brand {
+    font-size: 23px;
+    font-weight: 800;
+    color: var(--purple-dark);
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.brand-icon {
+    background: var(--lavender);
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    color: var(--purple);
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #666b8b;
+}
+
+.nav-links a:hover { color: var(--purple); }
+
+.nav-cta {
+    background: var(--purple);
+    color: white !important;
+    padding: 10px 18px;
+    border-radius: 12px;
+}
+
+.container {
+    width: min(1120px, 90%);
+    margin: auto;
+}
+
+.hero {
+    padding: 70px 0 60px;
+    background:
+        radial-gradient(circle at 85% 20%, #e5ddff 0, transparent 29%),
+        radial-gradient(circle at 10% 80%, #dff3ff 0, transparent 30%),
+        linear-gradient(135deg, #f8f7ff, #f0efff);
+}
+
+.hero-grid {
+    display: grid;
+    grid-template-columns: 1.2fr .8fr;
+    align-items: center;
+    gap: 45px;
+}
+
+.eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: white;
+    border: 1px solid #e8e3ff;
+    color: var(--purple-dark);
+    padding: 8px 14px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.hero h1 {
+    font-size: clamp(36px, 5vw, 59px);
+    line-height: 1.12;
+    letter-spacing: -1.5px;
+    margin-bottom: 20px;
+}
+
+.gradient-text {
+    background: linear-gradient(90deg, #7969e0, #a47bde);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.hero-description {
+    color: var(--muted);
+    max-width: 520px;
+    font-size: 15px;
+    line-height: 1.9;
+    margin-bottom: 27px;
+}
+
+.primary-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 22px;
+    color: white;
+    background: linear-gradient(100deg, #7565d9, #9980e6);
+    border-radius: 13px;
+    font-weight: 700;
+    box-shadow: 0 9px 22px #8a78df35;
+    transition: .2s;
+}
+
+.primary-btn:hover { transform: translateY(-3px); }
+
+.hero-note {
+    margin-top: 18px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.hero-art {
+    min-height: 340px;
+    position: relative;
+    display: grid;
+    place-items: center;
+}
+
+.moon-circle {
+    width: 270px;
+    height: 270px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #e3dcff, #c4d9ff);
+    display: grid;
+    place-items: center;
+    position: relative;
+    box-shadow: 0 25px 65px #8474d72b;
+}
+
+.big-moon {
+    font-size: 115px;
+    color: #7666d6;
+    filter: drop-shadow(0 10px 15px #7467c544);
+}
+
+.float-card {
+    position: absolute;
+    background: white;
+    border: 1px solid #eeeaff;
+    padding: 15px 18px;
+    border-radius: 17px;
+    box-shadow: 0 12px 32px #34346c13;
+    font-size: 12px;
+}
+
+.float-card i { color: var(--purple); margin-right: 6px; }
+.float-card strong { display: block; font-size: 15px; margin-top: 4px; }
+.float-one { top: 20px; right: 0; }
+.float-two { bottom: 18px; left: 0; }
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-top: -12px;
+    position: relative;
+    z-index: 2;
+}
+
+.stat-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 23px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 8px 25px #42447b08;
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    background: var(--lavender);
+    color: var(--purple);
+    font-size: 19px;
+    flex-shrink: 0;
+}
+
+.stat-card h3 { font-size: 23px; }
+.stat-card p { color: var(--muted); font-size: 12px; }
+
+.section {
+    padding: 80px 0;
+    scroll-margin-top: 85px;
+}
+
+.section-heading {
+    text-align: center;
+    max-width: 650px;
+    margin: 0 auto 36px;
+}
+
+.section-heading .eyebrow { margin-bottom: 12px; }
+
+.section-heading h2 {
+    font-size: clamp(28px, 4vw, 37px);
+    line-height: 1.25;
+    margin-bottom: 13px;
+}
+
+.section-heading p {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.predict-layout {
+    display: grid;
+    grid-template-columns: 1fr 290px;
+    gap: 24px;
+    align-items: start;
+}
+
+.panel {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 28px;
+    box-shadow: 0 12px 35px #42447b09;
+}
+
+.panel-title {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin-bottom: 24px;
+}
+
+.panel-title-icon {
+    width: 47px;
+    height: 47px;
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    color: var(--purple);
+    background: var(--lavender);
+    font-size: 19px;
+}
+
+.panel-title h3 { font-size: 19px; }
+.panel-title p { color: var(--muted); font-size: 12px; }
+
+.form-section-title {
+    font-size: 13px;
+    color: var(--purple-dark);
+    font-weight: 800;
+    padding-bottom: 10px;
+    margin: 10px 0 18px;
+    border-bottom: 1px solid var(--border);
+    grid-column: 1 / -1;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 19px;
+}
+
+.field label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.field input, .field select {
+    width: 100%;
+    min-width: 0;
+    padding: 12px;
+    border: 1px solid #e5e5f2;
+    border-radius: 11px;
+    background: #fcfcff;
+    color: var(--navy);
+    font-family: inherit;
+    font-size: 13px;
+    outline: none;
+    transition: .2s;
+}
+
+.field input:focus, .field select:focus {
+    border-color: #9688e8;
+    box-shadow: 0 0 0 3px #8b7be91b;
+}
+
+.field small {
+    color: var(--muted);
+    font-size: 10px;
+    display: block;
+    margin-top: 5px;
+}
+
+.predict-btn {
+    width: 100%;
+    border: none;
+    padding: 15px;
+    margin-top: 25px;
+    border-radius: 12px;
+    background: linear-gradient(100deg, #7565d9, #9980e6);
+    color: white;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.predict-btn:hover { filter: brightness(1.04); }
+.predict-btn:disabled { opacity: .65; cursor: wait; }
+
+.side-panel {
+    background: linear-gradient(155deg, #f0edff, #f7f4ff 65%, #e8f4ff);
+    border: 1px solid #e9e3ff;
+    border-radius: 22px;
+    padding: 24px;
+}
+
+.side-panel h3 { font-size: 19px; margin-bottom: 8px; }
+.side-panel > p { color: var(--muted); font-size: 12px; margin-bottom: 22px; }
+
+.tip {
+    background: white;
+    border-radius: 14px;
+    padding: 15px;
+    margin-bottom: 12px;
+    border: 1px solid #ffffff;
+}
+
+.tip i { color: var(--purple); font-size: 17px; margin-bottom: 8px; }
+.tip h4 { font-size: 13px; margin-bottom: 4px; }
+.tip p { color: var(--muted); font-size: 11px; line-height: 1.7; }
+
+.result-card {
+    display: none;
+    margin-top: 23px;
+    padding: 24px;
+    text-align: center;
+    border-radius: 17px;
+    background: linear-gradient(135deg, #f0edff, #f4f8ff);
+    border: 1px solid #e4dfff;
+}
+
+.result-icon { font-size: 34px; margin-bottom: 8px; }
+.result-card h3 { font-size: 23px; color: var(--purple-dark); }
+.result-card p { font-size: 13px; color: var(--muted); margin-top: 6px; }
+.result-card .result-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; }
+
+.error-text { color: #bb354c !important; }
+
+.features-section { background: white; }
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.feature-card {
+    border: 1px solid var(--border);
+    padding: 25px;
+    border-radius: 18px;
+    transition: .2s;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px #55508b12;
+}
+
+.feature-icon {
+    width: 50px;
+    height: 50px;
+    display: grid;
+    place-items: center;
+    background: var(--lavender);
+    color: var(--purple);
+    border-radius: 15px;
+    font-size: 20px;
+    margin-bottom: 17px;
+}
+
+.feature-card h3 { font-size: 17px; margin-bottom: 8px; }
+.feature-card p { font-size: 13px; color: var(--muted); line-height: 1.8; }
+
+.habits-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+.habit {
+    display: flex;
+    gap: 14px;
+    padding: 20px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+}
+
+.habit i {
+    color: var(--purple);
+    background: var(--lavender);
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    flex-shrink: 0;
+}
+
+.habit h3 { font-size: 14px; margin-bottom: 5px; }
+.habit p { color: var(--muted); font-size: 12px; line-height: 1.8; }
+
+.disclaimer {
+    margin-top: 28px;
+    background: #fff8e9;
+    border: 1px solid #f4e6c5;
+    border-radius: 13px;
+    padding: 17px;
+    font-size: 12px;
+    color: #78633a;
+}
+
+footer {
+    background: #242547;
+    color: white;
+    padding: 38px 0 20px;
+}
+
+.footer-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    align-items: start;
+    padding-bottom: 28px;
+}
+
+footer .brand { color: white; }
+footer p { color: #c5c6df; font-size: 12px; margin-top: 10px; max-width: 390px; }
+.footer-links { display: flex; gap: 20px; flex-wrap: wrap; font-size: 12px; color: #e0def8; }
+.footer-bottom { border-top: 1px solid #ffffff20; padding-top: 18px; color: #b7b8d2; font-size: 11px; text-align: center; }
+
+@media(max-width: 850px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero-art { min-height: 280px; }
+    .moon-circle { width: 220px; height: 220px; }
+    .big-moon { font-size: 90px; }
+    .predict-layout { grid-template-columns: 1fr; }
+    .feature-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media(max-width: 600px) {
+    .navbar { padding: 13px 5%; }
+    .nav-links { gap: 12px; font-size: 11px; }
+    .nav-links a:not(.nav-cta) { display: none; }
+    .brand { font-size: 20px; }
+    .hero { padding: 48px 0 45px; }
+    .hero h1 { font-size: 39px; }
+    .hero-art { min-height: 245px; }
+    .moon-circle { width: 190px; height: 190px; }
+    .big-moon { font-size: 78px; }
+    .float-one { right: -5px; }
+    .float-two { left: -5px; }
+    .stats { grid-template-columns: 1fr; margin-top: 20px; }
+    .stat-card { padding: 17px; }
+    .section { padding: 58px 0; }
+    .panel { padding: 20px; }
+    .form-grid, .feature-grid, .habits-grid { grid-template-columns: 1fr; }
+    .footer-top { flex-direction: column; }
+}
+</style>
+</head>
+
+<body>
+
+<nav class="navbar">
+    <a class="brand" href="#">
+        <span class="brand-icon"><i class="fa-solid fa-moon"></i></span>
+        SleepWell
+    </a>
+
+    <div class="nav-links">
+        <a href="#home">Home</a>
+        <a href="#predict">Predict</a>
+        <a href="#features">Features</a>
+        <a href="#tips">Sleep Tips</a>
+        <a href="#predict" class="nav-cta">Get Started <i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+</nav>
+
+<section class="hero" id="home">
+<div class="container hero-grid">
+    <div>
+        <div class="eyebrow"><i class="fa-solid fa-sparkles"></i> YOUR PERSONAL SLEEP COMPANION</div>
+        <h1>Better Nights.<br><span class="gradient-text">Brighter Days.</span></h1>
+        <p class="hero-description">
+            Discover what your daily habits may reveal about your sleep.
+            Enter your lifestyle details and let our machine learning model
+            estimate your sleep quality.
+        </p>
+        <a class="primary-btn" href="#predict">
+            Predict My Sleep <i class="fa-solid fa-arrow-right"></i>
+        </a>
+        <p class="hero-note"><i class="fa-solid fa-shield-heart"></i> Lifestyle-based prediction · Simple and easy to use</p>
+    </div>
+
+    <div class="hero-art">
+        <div class="moon-circle">
+            <span class="big-moon"><i class="fa-solid fa-moon"></i></span>
+        </div>
+        <div class="float-card float-one">
+            <i class="fa-solid fa-star"></i> Your nightly routine
+            <strong>Starts with awareness</strong>
+        </div>
+        <div class="float-card float-two">
+            <i class="fa-solid fa-heart"></i> Small habits
+            <strong>Meaningful changes</strong>
+        </div>
+    </div>
+</div>
+</section>
+
+<div class="container">
+    <div class="stats">
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fa-solid fa-brain"></i></div>
+            <div><h3>ML Powered</h3><p>Random Forest model</p></div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fa-solid fa-chart-simple"></i></div>
+            <div><h3>3 Categories</h3><p>Good · Average · Poor</p></div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fa-solid fa-user-check"></i></div>
+            <div><h3>Personalized</h3><p>Based on your entered details</p></div>
+        </div>
+    </div>
+</div>
+
+<section class="section" id="predict">
+<div class="container">
+    <div class="section-heading">
+        <div class="eyebrow"><i class="fa-solid fa-wand-magic-sparkles"></i> YOUR SLEEP INSIGHTS</div>
+        <h2>Let's Understand Your <span class="gradient-text">Sleep</span></h2>
+        <p>Fill in the details below. Our trained model will estimate a sleep quality category based on the information you provide.</p>
+    </div>
+
+    <div class="predict-layout">
+        <div class="panel">
+            <div class="panel-title">
+                <div class="panel-title-icon"><i class="fa-solid fa-clipboard-list"></i></div>
+                <div><h3>Daily Lifestyle Details</h3><p>Complete all fields to get your prediction.</p></div>
+            </div>
+
+            <form id="sleepForm">
+                <div class="form-grid">
+                    <div class="form-section-title"><i class="fa-solid fa-user"></i> Personal Information</div>
+
+                    <div class="field">
+                        <label for="gender">Gender</label>
+                        <select id="gender" required>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="age">Age</label>
+                        <input id="age" type="number" min="1" max="100" value="25" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="occupation">Occupation</label>
+                        <select id="occupation" required>
+                            <option>Student</option>
+                            <option>Software Engineer</option>
+                            <option>Doctor</option>
+                            <option>Teacher</option>
+                            <option>Nurse</option>
+                            <option>Accountant</option>
+                            <option>Sales Representative</option>
+                            <option>Scientist</option>
+                            <option>Lawyer</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="duration">Sleep Duration (hours)</label>
+                        <input id="duration" type="number" min="0" max="24" step="0.1" value="7.5" required>
+                        <small>Enter your average hours of sleep.</small>
+                    </div>
+
+                    <div class="form-section-title"><i class="fa-solid fa-heart-pulse"></i> Lifestyle & Wellbeing</div>
+
+                    <div class="field">
+                        <label for="activity">Physical Activity Level</label>
+                        <input id="activity" type="number" min="0" max="200" value="45" required>
+                        <small>Dataset scale; not steps per day.</small>
+                    </div>
+
+                    <div class="field">
+                        <label for="stress">Stress Level (1–10)</label>
+                        <input id="stress" type="number" min="1" max="10" value="4" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="bmi">BMI Category</label>
+                        <select id="bmi" required>
+                            <option>Normal</option>
+                            <option>Normal Weight</option>
+                            <option>Overweight</option>
+                            <option>Obese</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="heart">Heart Rate (bpm)</label>
+                        <input id="heart" type="number" min="30" max="220" value="70" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="steps">Daily Steps</label>
+                        <input id="steps" type="number" min="0" value="7000" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="bp">Blood Pressure</label>
+                        <input id="bp" type="text" value="120/80" pattern="[0-9]{2,3}/[0-9]{2,3}" required>
+                        <small>Format: systolic/diastolic, e.g. 120/80.</small>
+                    </div>
+                </div>
+
+                <button class="predict-btn" id="predictBtn" type="submit">
+                    <i class="fa-solid fa-moon"></i> Predict My Sleep Quality
+                </button>
+            </form>
+
+            <div class="result-card" id="result" aria-live="polite">
+                <div class="result-icon" id="resultIcon"><i class="fa-solid fa-moon"></i></div>
+                <div class="result-label">YOUR MODEL PREDICTION</div>
+                <h3 id="resultTitle">Your Result</h3>
+                <p id="resultMessage"></p>
+            </div>
+        </div>
+
+        <aside class="side-panel">
+            <h3><i class="fa-solid fa-lightbulb"></i> Sleep Essentials</h3>
+            <p>Small routines can help you build a more consistent sleep schedule.</p>
+
+            <div class="tip">
+                <i class="fa-solid fa-clock"></i>
+                <h4>Keep a Sleep Schedule</h4>
+                <p>Try to go to bed and wake up at consistent times every day.</p>
+            </div>
+
+            <div class="tip">
+                <i class="fa-solid fa-mobile-screen-button"></i>
+                <h4>Wind Down Before Bed</h4>
+                <p>Make time for a relaxing routine and reduce stimulating screen use.</p>
+            </div>
+
+            <div class="tip">
+                <i class="fa-solid fa-mug-hot"></i>
+                <h4>Watch Evening Caffeine</h4>
+                <p>Notice whether late-day coffee or tea affects your ability to fall asleep.</p>
+            </div>
+
+            <div class="tip">
+                <i class="fa-solid fa-person-walking"></i>
+                <h4>Stay Active</h4>
+                <p>Regular movement during the day may support healthy sleep habits.</p>
+            </div>
+        </aside>
+    </div>
+</div>
+</section>
+
+<section class="section features-section" id="features">
+<div class="container">
+    <div class="section-heading">
+        <div class="eyebrow"><i class="fa-solid fa-star"></i> WHY SLEEPWELL?</div>
+        <h2>Understand Your Sleep Patterns</h2>
+        <p>A simple demonstration of how machine learning can classify sleep quality using lifestyle and physiological data.</p>
+    </div>
+
+    <div class="feature-grid">
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fa-solid fa-brain"></i></div>
+            <h3>Machine Learning</h3>
+            <p>A trained Random Forest classifier uses patterns learned from a sleep health dataset to produce a category prediction.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fa-solid fa-chart-pie"></i></div>
+            <h3>Three Outcomes</h3>
+            <p>View a predicted category: Good, Average or Poor, based on the labels defined for this project.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon"><i class="fa-solid fa-laptop"></i></div>
+            <h3>Simple Interface</h3>
+            <p>Enter the required details in a clean form and receive the model's response without navigating away.</p>
+        </div>
+    </div>
+</div>
+</section>
+
+<section class="section" id="tips">
+<div class="container">
+    <div class="section-heading">
+        <div class="eyebrow"><i class="fa-solid fa-cloud-moon"></i> BUILD HEALTHIER ROUTINES</div>
+        <h2>Little Habits, Better Nights</h2>
+        <p>General wellness ideas that may support a regular sleep routine.</p>
+    </div>
+
+    <div class="habits-grid">
+        <div class="habit">
+            <i class="fa-solid fa-bed"></i>
+            <div><h3>Create a Comfortable Sleep Space</h3><p>Keep your bedroom quiet, dark and comfortable where possible.</p></div>
+        </div>
+
+        <div class="habit">
+            <i class="fa-solid fa-sun"></i>
+            <div><h3>Get Daylight and Movement</h3><p>Spend time outdoors and include activity that suits your routine.</p></div>
+        </div>
+
+        <div class="habit">
+            <i class="fa-solid fa-book-open"></i>
+            <div><h3>Make Time to Relax</h3><p>Try reading, calm breathing or another relaxing activity before bedtime.</p></div>
+        </div>
+
+        <div class="habit">
+            <i class="fa-solid fa-calendar-check"></i>
+            <div><h3>Track Your Routine</h3><p>Notice changes in sleep duration, stress and daytime energy over time.</p></div>
+        </div>
+    </div>
+
+    <div class="disclaimer">
+        <strong><i class="fa-solid fa-circle-info"></i> Important note:</strong>
+        This is an educational machine learning project, not a medical diagnostic tool. Predictions depend on the training dataset and the input values. They do not measure sleep stages or diagnose sleep disorders. If you have ongoing sleep difficulties, consider speaking with a qualified healthcare professional.
+    </div>
+</div>
+</section>
+
+<footer>
+<div class="container">
+    <div class="footer-top">
+        <div>
+            <a class="brand" href="#"><span class="brand-icon"><i class="fa-solid fa-moon"></i></span> SleepWell</a>
+            <p>A student machine learning project exploring the relationship between sleep quality and lifestyle factors.</p>
+        </div>
+        <div class="footer-links">
+            <a href="#home">Home</a>
+            <a href="#predict">Predict</a>
+            <a href="#features">Features</a>
+            <a href="#tips">Sleep Tips</a>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        © 2026 SleepWell · Sleep Quality Predictor · Educational use only
+    </div>
+</div>
+</footer>
+
+<script>
+const form = document.getElementById("sleepForm");
+const result = document.getElementById("result");
+const resultTitle = document.getElementById("resultTitle");
+const resultMessage = document.getElementById("resultMessage");
+const resultIcon = document.getElementById("resultIcon");
+const predictBtn = document.getElementById("predictBtn");
+
+form.addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const data = {
+        "Gender": document.getElementById("gender").value,
+        "Age": Number(document.getElementById("age").value),
+        "Occupation": document.getElementById("occupation").value,
+        "Sleep Duration": Number(document.getElementById("duration").value),
+        "Physical Activity Level": Number(document.getElementById("activity").value),
+        "Stress Level": Number(document.getElementById("stress").value),
+        "BMI Category": document.getElementById("bmi").value,
+        "Heart Rate": Number(document.getElementById("heart").value),
+        "Daily Steps": Number(document.getElementById("steps").value),
+        "Blood Pressure": document.getElementById("bp").value
+    };
+
+    predictBtn.disabled = true;
+    predictBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Analyzing your details...';
+    result.style.display = "block";
+    resultTitle.textContent = "Analyzing...";
+    resultMessage.textContent = "Please wait while the model processes your inputs.";
+    resultIcon.innerHTML = '<i class="fa-solid fa-moon fa-bounce"></i>';
+    result.classList.remove("error-text");
+    result.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+    try {
+        const response = await fetch("/predict", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        });
+
+        const output = await response.json();
+
+        if (!response.ok) {
+            throw new Error(output.error || "Prediction failed.");
+        }
+
+        const category = output.prediction;
+        resultTitle.textContent = "Sleep Quality: " + category;
+        resultIcon.innerHTML = category === "Good"
+            ? '<i class="fa-solid fa-moon"></i>'
+            : category === "Average"
+            ? '<i class="fa-solid fa-cloud-moon"></i>'
+            : '<i class="fa-solid fa-bed"></i>';
+
+        const messages = {
+            "Good": "The model classified your input as Good. Keep building a consistent sleep routine.",
+            "Average": "The model classified your input as Average. Review your daily habits and sleep schedule.",
+            "Poor": "The model classified your input as Poor. Consider reviewing your routine and seek professional advice if sleep difficulties persist."
+        };
+
+        resultMessage.textContent = messages[category] || output.message;
+    } catch (error) {
+        resultTitle.textContent = "Unable to predict";
+        resultMessage.textContent = error.message;
+        resultIcon.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
+    } finally {
+        predictBtn.disabled = false;
+        predictBtn.innerHTML = '<i class="fa-solid fa-moon"></i> Predict My Sleep Quality';
+    }
+});
+</script>
+
+</body>
+</html>
+```
